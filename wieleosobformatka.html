@@ -1,0 +1,54 @@
+<center>
+<h2 style="color:green">Przykłady skryptów do formatki dla obsługi zgłoszeń większej liczby osób za jednym razem</h2>
+<h3>funkcja przetwarza listę nazwisk do tablicy linijek,<br>które potem można indywidualnie obrabiać:</h3>
+
+<textarea id="osoby" placeholder="Wklej listę osób w formacie Imię Nazwisko jedno pod drugim" style="width:200px;height:300px;"></textarea>
+<br>
+<button onclick="myFunction()">Przelicz</button>
+
+<hr>
+ <table>  <tr>
+    <th>Tu będzie spis osób &nbsp;&nbsp;&nbsp;</th>
+    <th>Tu zobaczysz listę numerowaną &nbsp;&nbsp;&nbsp;</th>
+    <th>Tu będzie podsumowanie &nbsp;&nbsp;&nbsp;</th>
+    <th>Zaznaczanie dla kogo obrazki &nbsp;&nbsp;&nbsp;</th>
+  </tr>   <tr>
+    <td><p id="StringToArray"></p></td>
+    <td><p id="Ponumerowane"></p></td>
+    <td><center><p id="Podsumowanie"></p></center></td>
+    <td><center><p id="KomuObrazki"></p></center></td>
+  </tr> </table> 
+
+<script>
+	function myFunction() {
+	
+		var string = document.getElementById("osoby").value;
+
+		//czyścimy puste linie ze środka
+		// string = string.replace(/^\s*$(?:\r\n?|\n)/gm, ""); // to zostawiało ostatnią pustą linię, zaś to poniżej działa OK.
+		string = string.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
+		
+		// pakujemy linie rozdzielone enterami na kolejne wiersze do tablicy a1
+		var array = string.split("\n");
+
+		//obliczamy cenę
+		var stawka = 25; //do ustawienia
+		var cena = array.length * stawka;
+		var podsumuj = array.length + " osób po "+stawka+"zł <br>=<br> <b>" + cena + " zł</b>"
+		document.getElementById("Podsumowanie").innerHTML = podsumuj;
+
+		//dla celów wyświetlania na ekranie tu w owym przykłądzie HTML
+		a1 = array.join("<br>");
+		document.getElementById("StringToArray").innerHTML = a1;
+
+		// przykład dodatkowego przetworzenia każdego wiersza poprzez dodanie numerów kolejnych:
+		a2 = string.split('\n').map((line, index) => `${index + 1}. ${line}`).join('<br>\n')
+		document.getElementById("Ponumerowane").innerHTML = a2;
+		
+		// przykład kolejnego przetworzenia z generowanie checkboxu dla każdego wiersza poprzez dodanie kodu w tablicy:
+		//a3 = string.split('\n').map((line, index) => `${index + 1}. ${line}`).join('<input type="checkbox" name="theCheckbox" value=" + `${index + 1}` + " /><br>\n')
+		a3 = string.split('\n').map((line, index) => `${index+1}. `).join('<input type="checkbox" name="tc" value=" + `${index+1}` + " checked/><br>')
+	   	document.getElementById("KomuObrazki").innerHTML = a3;
+	}
+</script>
+</center>
